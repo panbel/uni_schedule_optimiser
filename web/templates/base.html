@@ -1,0 +1,32 @@
+<!-- web/templates/base.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Exam Scheduler{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <!-- Brand / Logo -->
+        <div class="nav-brand">
+          <a href="{{ url_for('landing') }}" class="brand-link">Exam Scheduler</a>
+        </div>
+        <!-- Navigation Links -->
+        <ul class="nav-links">
+          <li><a href="{{ url_for('landing') }}">Home</a></li>
+          <li><a href="{{ url_for('schedule_page') }}">Schedule</a></li>
+          <li><a href="{{ url_for('about') }}">About</a></li>
+          <li><a href="{{ url_for('contact') }}">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

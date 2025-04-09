@@ -1,13 +1,22 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Exam Schedule Result</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <h1>Final Exam Schedule</h1>
-  <table border="1" cellspacing="0" cellpadding="5">
+<!-- web/templates/result.html -->
+{% extends "base.html" %}
+{% block title %}Exam Schedule Result | Exam Scheduler{% endblock %}
+{% block content %}
+<h1>Final Exam Schedule</h1>
+
+{% if extended_warning and extended_last_date %}
+<div class="alert-warning">
+  <p>
+    <strong>Warning:</strong> Not all exams could be scheduled within your requested dates.
+    The schedule has been extended to {{ extended_last_date }}.
+    If you prefer to force the schedule strictly within your chosen range, click the button below.
+  </p>
+  <a href="{{ url_for('force_solution') }}" class="btn">Force Schedule Within Range</a>
+</div>
+{% endif %}
+
+<div class="schedule-table-container">
+  <table class="schedule-table">
     <thead>
       <tr>
         <th>Course</th>
@@ -18,23 +27,62 @@
     </thead>
     <tbody>
       {% for date, exam, course, count in schedule %}
-        <tr>
-          <td>{{ course }}</td>
-          <td>{{ exam }}</td>
-          <td>{{ date.strftime("%Y-%m-%d") }}</td>
-          <td>{{ count }}</td>
-        </tr>
+      <tr>
+        <td>{{ course }}</td>
+        <td>{{ exam }}</td>
+        <td>{{ date }}</td>
+        <td>{{ count }}</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
 
-  <h2>Calendar Views</h2>
+<div class="export-btn-container">
+  <a href="{{ url_for('export_schedule') }}" class="btn">Export to Excel</a>
+</div>
+
+{% if forced_mode %}
+  <!-- Show conflict summary if forced scheduling is active -->
+  <h2>Conflicts Summary</h2>
+  <p>Total Conflicts: <strong>{{ total_conflicts }}</strong></p>
+  <p>Impacted Students: <strong>{{ impacted_students }}</strong></p>
+  
+  <!-- Show conflict details table if we have any conflicts -->
+  {% if conflict_details and conflict_details|length > 0 %}
+    <h2>Student Conflicts</h2>
+    <div class="conflict-table-container">
+      <table class="conflict-table">
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Date</th>
+            <th>Exams</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student, date_str, exams in conflict_details %}
+          <tr>
+            <td>{{ student }}</td>
+            <td>{{ date_str }}</td>
+            <td>{{ exams }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endif %}
+
+<h2>Calendar Views</h2>
+<div class="calendar-container">
   {% for key, img in calendar_images.items() %}
-    <h3>{{ key[0] }} - {{ "%02d"|format(key[1]) }} ({{ months[key[1]] }})</h3>
-    <img src="data:image/png;base64,{{ img }}" alt="Calendar for {{ key[0] }}-{{ "%02d"|format(key[1]) }}" style="border:1px solid #ccc; margin-bottom:20px;"><br>
+    <div class="calendar-month">
+      <h3>{{ key[0] }} - {{ "%02d"|format(key[1]) }} ({{ months[key[1]] }})</h3>
+      <img src="data:image/png;base64,{{ img }}" alt="Calendar for {{ key[0] }}-{{ "%02d"|format(key[1]) }}">
+    </div>
   {% endfor %}
+</div>
 
-  <br>
-  <a href="{{ url_for('index') }}">Back to Home</a>
-</body>
-</html>
+<a href="{{ url_for('landing') }}" class="btn">Return to Home</a>
+{% endblock %}

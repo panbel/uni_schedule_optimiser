@@ -1,0 +1,41 @@
+<!-- web/templates/schedule.html -->
+{% extends "base.html" %}
+{% block title %}Schedule Exams | Exam Scheduler{% endblock %}
+{% block content %}
+<h1>Schedule Your Exams</h1>
+<p>Please upload an Excel file with <strong>Student ID, Exam ID, and Course Name</strong> columns.</p>
+<form action="{{ url_for('schedule_post') }}" method="post" enctype="multipart/form-data">
+  <label for="file">Excel File:</label>
+  <input type="file" name="file" id="file" required><br><br>
+  
+  <label for="first_date">First Exam Date:</label>
+  <input type="date" name="first_date" id="first_date" required><br><br>
+  
+  <label for="last_date">Last Exam Date:</label>
+  <input type="date" name="last_date" id="last_date" required><br><br>
+  
+  <label for="excluded_dates">
+    Excluded Dates:
+    <span class="tooltip" title="Optional: Comma-separated dates (YYYY-MM-DD) when no exams should be scheduled.">?</span>
+  </label>
+  <input type="text" name="excluded_dates" id="excluded_dates" placeholder="2025-05-15,2025-05-20"><br><br>
+  
+  <label for="fixed_schedules">
+    Fixed Schedules:
+    <span class="tooltip" title="Optional: Specify exam IDs with fixed dates (Format: EX_ID=YYYY-MM-DD).">?</span>
+  </label>
+  <input type="text" name="fixed_schedules" id="fixed_schedules" placeholder="EX8=2025-05-12"><br><br>
+  
+  <input type="submit" value="Optimize Schedule">
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="messages">
+      {% for category, message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% endblock %}

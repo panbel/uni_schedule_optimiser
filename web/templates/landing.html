@@ -1,0 +1,11 @@
+<!-- web/templates/landing.html -->
+{% extends "base.html" %}
+{% block title %}Welcome | Exam Scheduler{% endblock %}
+{% block content %}
+<div class="landing">
+  <h1>Welcome to Exam Scheduler</h1>
+  <p>Effortlessly optimize your exam timetable and ensure no student has overlapping exams.</p>
+  <p>Simply upload your exam data, pick your date range, and let our tool do the heavy lifting!</p>
+  <a href="{{ url_for('schedule_page') }}" class="btn">Get Started</a>
+</div>
+{% endblock %}
