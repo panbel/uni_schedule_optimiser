@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exam Scheduler</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>Exam Scheduler</h1>
+  <form action="{{ url_for('schedule') }}" method="post" enctype="multipart/form-data">
+    <label for="file">Excel File:</label><br>
+    <input type="file" name="file" id="file" required><br><br>
+    
+    <label for="first_date">First Exam Date (YYYY-MM-DD):</label><br>
+    <input type="text" name="first_date" id="first_date" placeholder="2025-05-10" required><br><br>
+    
+    <label for="last_date">Last Exam Date (YYYY-MM-DD):</label><br>
+    <input type="text" name="last_date" id="last_date" placeholder="2025-06-10" required><br><br>
+    
+    <label for="excluded_dates">Excluded Dates (comma-separated, YYYY-MM-DD):</label><br>
+    <input type="text" name="excluded_dates" id="excluded_dates" placeholder="2025-05-15"><br><br>
+    
+    <label for="fixed_schedules">Fixed Schedules (comma-separated, format EX_ID=YYYY-MM-DD):</label><br>
+    <input type="text" name="fixed_schedules" id="fixed_schedules" placeholder="EX8=2025-05-12"><br><br>
+    
+    <input type="submit" value="Schedule Exams">
+  </form>
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li style="color: red;">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exam Schedule Result</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>Final Exam Schedule</h1>
+  <table border="1" cellspacing="0" cellpadding="5">
+    <thead>
+      <tr>
+        <th>Course</th>
+        <th>Exam ID</th>
+        <th>Scheduled Date</th>
+        <th># of Students</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for date, exam, course, count in schedule %}
+        <tr>
+          <td>{{ course }}</td>
+          <td>{{ exam }}</td>
+          <td>{{ date.strftime("%Y-%m-%d") }}</td>
+          <td>{{ count }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Calendar Views</h2>
+  {% for key, img in calendar_images.items() %}
+    <h3>{{ key[0] }} - {{ "%02d"|format(key[1]) }} ({{ months[key[1]] }})</h3>
+    <img src="data:image/png;base64,{{ img }}" alt="Calendar for {{ key[0] }}-{{ "%02d"|format(key[1]) }}" style="border:1px solid #ccc; margin-bottom:20px;"><br>
+  {% endfor %}
+
+  <br>
+  <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
